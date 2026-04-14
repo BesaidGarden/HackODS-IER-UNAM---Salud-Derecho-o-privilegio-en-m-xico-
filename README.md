@@ -19,6 +19,7 @@ Utilizamos datos oficiales de INEGI, CONEVAL y el SIODS para analizar estas dos 
 * **/datos**: Fuentes oficiales utilizadas para el análisis de datos.
 * **/scripts**: Código utilizado para recopilar la información y generar el dashboard.
 * **/dashboard**: Dashboard interactivo en formato HTML.
+* **/docs**: Carpeta para despliegue en GitHub Pages que contiene el dashboard final.
   
 ---
 **Organizaciones vinculadas:** ONU | Agenda 2030 | IER-UNAM

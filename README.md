@@ -1,4 +1,5 @@
 # Salud en México: ¿Derecho o Lujo?
+> **Dashboard interactivo:** [Haz clic aquí para ver el proyecto](https://besaidgarden.github.io/HackODS-IER-UNAM-Salud-Derecho-o-Privilegio-en-Mexico/)
 
 Este proyecto forma parte del **HackODS IER-UNAM** y se centra en el análisis visual de datos para el **ODS 3: Salud y Bienestar**. A través de dashboards interactivos, buscamos evidenciar si la salud en México es una garantía de vida o un privilegio condicionado por la capacidad de pago.
 

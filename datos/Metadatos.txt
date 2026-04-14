@@ -1,0 +1,112 @@
+﻿Nombre de la información: Medición de la pobreza multidimensional, Estados Unidos Mexicanos, 2022. 
+Fuente: 
+https://www.coneval.org.mx/Medicion/MP/Paginas/Programas_BD_2022.aspx
+Fecha de descarga: 2026/04/11. 
+Licencia: 
+Los términos de uso libre de la información de este dataset pueden ser consultados en el       siguiente link:
+https://www.coneval.org.mx/Paginas/Pie/terminos-uso-libre.aspx
+Descripción de variables por dataset:
+1. folioviv: Identificador de la vivienda.
+2. foliohog: Identificador del hogar.
+3. numren: Identificador de la persona.
+4. est_dis: Estrato de diseño.
+5. upm: Unidad primaria de muestreo.
+6. factor: Factor de expansión.
+7. tam_loc: Tamaño de la localidad (1 a 4).
+8. rururb: Identificador de localidades rurales (0: Urbanas, 1: Rurales).
+9. ent: Identificador de la entidad federativa.
+10. ubica_geo: Ubicación geográfica.
+11. edad: Edad reportada al momento de la entrevista.
+12. sexo: Sexo (1: Masculino, 2: Femenino).
+13. parentesco: Parentesco con el jefe del hogar.
+14. ic_rezedu: Indicador de rezago educativo (0: No presenta carencia, 1: Presenta carencia).
+15. anac_e: Año de nacimiento.
+16. inas_esc: Inasistencia a la escuela (0: Si asiste, 1: No asiste).
+17. niv_ed: Nivel educativo (0 a 3).
+18. ic_asalud: Indicador de carencia por acceso a servicios de salud.
+19. ic_segsoc: Indicador de carencia por acceso a la seguridad social.
+20. sa_dir: Acceso directo a servicios de salud (0: Sin acceso, 1: Con acceso).
+21. ss_dir: Acceso directo a la seguridad social (0: Sin acceso, 1: Con acceso).
+22. s_salud: Servicios médicos por otros núcleos familiares o por contratación propia.
+23. par: Integrantes que tienen acceso por otros miembros (1 a 6).
+24. jef_ss: Acceso directo a la seguridad social de la jefatura del hogar.
+25. cony_ss: Acceso directo a la seguridad social de cónyuge de la jefatura del hogar.
+26. hijo_ss: Acceso directo a la seguridad social de hijos(as) de la jefatura del hogar.
+27. pea: Población económicamente activa (0: PNEA, 1: PEA ocupada, 2: PEA desocupada).
+28. jub: Población pensionada o jubilada.
+29. pam: Programa de adultos mayores (0: No recibe, 1: Recibe).
+30. ing_pam: Ingreso promedio mensual por programas de adultos mayores.
+31. ic_cv: Indicador de carencia por calidad y espacios de la vivienda.
+32. icv_pisos: Indicador de carencia por material de piso de la vivienda.
+33. icv_muros: Indicador de carencia por material de muros de la vivienda.
+34. icv_techos: Indicador de carencia por material de techos de la vivienda.
+35. icv_hac: Indicador de carencia por hacinamiento en la vivienda.
+36. ic_sbv: Indicador de carencia por acceso a servicios básicos en la vivienda.
+37. isb_agua: Indicador de carencia por acceso al agua.
+38. isb_dren: Indicador de carencia por servicio de drenaje.
+39. isb_luz: Indicador de carencia por servicios de electricidad.
+40. isb_combus: Indicador de carencia por combustible para cocinar.
+41. ic_ali_nc: Indicador de carencia por acceso a la alimentación nutritiva y de calidad.
+42. id_men: Hogares con población de 0 a 17 años.
+43. tot_iaad: Escala de IA para hogares sin menores de 18 años.
+44. tot_iamen: Escala de IA para hogares con menores de 18 años.
+45. ins_ali: Grado de Inseguridad Alimentaria (0: Seguridad, 1: Leve, 2: Moderada, 3: Severa).
+46. ic_ali: Indicador de carencia por acceso a la alimentación.
+47. lca: Limitación en el consumo de alimentos (0: No limitado, 1: Limitado).
+48. dch: Dieta consumida en los hogares (1: Pobre, 2: Limítrofe, 3: Aceptable).
+49. plp_e: Población con ingreso menor a la línea de pobreza extrema por ingresos.
+50. plp: Población con ingreso menor a la línea de pobreza por ingresos.
+51. pobreza: Pobreza (0: No pobre, 1: Pobre).
+52. pobreza_e: Pobreza extrema (0: No pobre extremo, 1: Pobre extremo).
+53. pobreza_m: Pobreza moderada.
+54. vul_car: Población vulnerable por carencias.
+55. vul_ing: Población vulnerable por ingresos.
+56. no_pobv: Población no pobre y no vulnerable.
+57. i_privacion: Índice de Privación Social.
+58. carencias: Población con al menos una carencia social.
+59. carencias3: Población con al menos tres carencias sociales.
+60. cuadrantes: Cuadrantes de bienestar económico y derechos sociales.
+61. prof1: Índice FGT con alfa igual a 1 (línea de pobreza por ingresos).
+62. prof_e1: Índice FGT con alfa igual a 1 (línea de pobreza extrema por ingresos).
+63. profun: Profundidad de la privación social.
+64. int_pob: Intensidad de la privación social: en situación de pobreza.
+65. int_pobe: Intensidad de la privación social: en situación de pobreza extrema.
+66. int_vulcar: Intensidad de la privación social: población vulnerable por carencias.
+67. int_caren: Intensidad de la privación social: población con carencias sociales.
+68. tamhogesc: Tamaño del hogar ajustado.
+69. ictpc: Ingreso corriente total per cápita.
+70. ict: Ingreso corriente total del hogar.
+71. ing_mon: Ingreso corriente monetario del hogar.
+72. ing_lab: Ingreso corriente monetario laboral.
+73. ing_ren: Ingreso corriente monetario por rentas.
+74. ing_tra: Ingreso corriente monetario por transferencias.
+75. nomon: Ingreso corriente no monetario.
+76. pago_esp: Ingreso corriente no monetario pago especie.
+77. reg_esp: Ingreso corriente no monetario regalos especie.
+78. hli: Hablante de lengua indígena (0: No habla, 1: Habla).
+79. discap: Población con presencia de discapacidad física o mental.
+
+
+
+
+Nombre de la información: Gasto corriente monetario promedio trimestral por entidad federativa según grandes rubros del gasto, 2024.
+Fuente: 
+https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Hogares_Hogares_12_60ab9bc6-fec2-4737-a8a5-3d3b435398b6&idrt=54&opc=t
+Fecha de descarga: 2026/04/11
+Licencia: 
+Los términos de uso libre de la información de este dataset pueden ser consultados en el       siguiente link:
+https://www.inegi.org.mx/inegi/terminos.html
+
+
+Descripción de variables por dataset:
+1. Entidad federativa: Nombre de la unidad geográfica o estado de la República Mexicana.
+2. Total: Suma total del gasto corriente monetario promedio trimestral por hogar.
+3. Alimentos, bebidas y tabaco: Gasto destinado al consumo de productos alimenticios, bebidas alcohólicas y no alcohólicas, y tabaco.
+4. Vestido y calzado: Gasto en prendas de vestir, accesorios de vestir y calzado para los integrantes del hogar.
+5. Vivienda, servicios de conservación, energía eléctrica y combustibles: Gasto relacionado con el alquiler, mantenimiento de la vivienda, consumo de electricidad y gas u otros combustibles.
+6. Artículos y servicios para la limpieza, cuidados de la casa, enseres domésticos y muebles, cristalería, utensilios domésticos y blancos: Gasto en productos de limpieza, mobiliario, electrodomésticos y herramientas para el hogar.
+7. Cuidados de la salud: Gasto en servicios médicos, consultas, medicamentos y aparatos ortopédicos o terapéuticos.
+8. Transporte; adquisición, mantenimiento, accesorios y servicios para vehículos; comunicaciones: Gasto en transporte público, adquisición y mantenimiento de vehículos propios, y servicios de telefonía o internet.
+9. Servicios de educación, artículos educativos, artículos de esparcimiento y otros gastos de esparcimiento: Gasto en colegiaturas, útiles escolares, entretenimiento, cultura y recreación.
+10. Cuidados personales, accesorios y efectos personales y otros gastos diversos: Gasto en artículos de aseo personal, servicios de peluquería, joyería y otros gastos no clasificados.
+11. Transferencias de gasto: Gasto destinado a pagos realizados a personas ajenas al hogar o instituciones (como pensiones alimenticias o donaciones).

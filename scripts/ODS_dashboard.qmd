@@ -1,0 +1,336 @@
+---
+title: "ODS 3 — Salud y Bienestar en México (2022)"
+format:
+  dashboard:
+    theme: cosmo
+    nav-buttons:
+      - icon: github
+        href: https://github.com
+jupyter:
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+#| include: false
+
+import gdown
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import requests
+import json
+
+# ================================================================
+# 1. DESCARGA Y CARGA DE DATOS DE POBREZA
+# ================================================================
+file_id = '1eZuKRnxImxnWmpU7a6zfDNs8DAdZDTMv'
+url = f'https://drive.google.com/uc?id={file_id}'
+output_zip = 'pobreza22.zip'
+
+gdown.download(url, output_zip, quiet=True)
+
+import zipfile
+with zipfile.ZipFile(output_zip, 'r') as z:
+    z.extractall('.')
+
+df_pobreza = pd.read_csv('pobreza22.csv', encoding='latin-1')
+
+# ================================================================
+# 2. CARGAR GEOJSON DE ESTADOS DE MÉXICO
+# ================================================================
+geojson_url = 'https://raw.githubusercontent.com/angelnmara/geojson/master/mexicoHigh.json'
+response = requests.get(geojson_url)
+mexico_geojson = response.json()
+
+# ================================================================
+# 3. DICCIONARIO DE ENTIDADES Y MAPEO DE NOMBRES
+# ================================================================
+cat_entidades = {
+    1:  "Aguascalientes",
+    2:  "Baja California",
+    3:  "Baja California Sur",
+    4:  "Campeche",
+    5:  "Coahuila de Zaragoza",
+    6:  "Colima",
+    7:  "Chiapas",
+    8:  "Chihuahua",
+    9:  "Ciudad de México",
+    10: "Durango",
+    11: "Guanajuato",
+    12: "Guerrero",
+    13: "Hidalgo",
+    14: "Jalisco",
+    15: "México",
+    16: "Michoacán de Ocampo",
+    17: "Morelos",
+    18: "Nayarit",
+    19: "Nuevo León",
+    20: "Oaxaca",
+    21: "Puebla",
+    22: "Querétaro",
+    23: "Quintana Roo",
+    24: "San Luis Potosí",
+    25: "Sinaloa",
+    26: "Sonora",
+    27: "Tabasco",
+    28: "Tamaulipas",
+    29: "Tlaxcala",
+    30: "Veracruz de Ignacio de la Llave",
+    31: "Yucatán",
+    32: "Zacatecas"
+}
+
+nombre_normalizado = {
+    "Veracruz de Ignacio de la Llave": "Veracruz",
+    "Coahuila de Zaragoza":            "Coahuila",
+    "Michoacán de Ocampo":             "Michoacán",
+    "Ciudad de México":                "Ciudad de México",
+}
+
+df_pobreza['ent_name'] = df_pobreza['ent'].map(cat_entidades)
+df_pobreza['ent_geo']  = df_pobreza['ent_name'].replace(nombre_normalizado)
+
+# ================================================================
+# 4. LIMPIEZA Y VARIABLES DERIVADAS
+# ================================================================
+def categorizar_urbanizacion(rururb):
+    if rururb == 0:
+        return 'Alta Urbanización'
+    elif rururb == 1:
+        return 'Baja/Rural'
+    else:
+        return 'Media Urbanización'
+
+df_pobreza['estrato_urbano'] = df_pobreza['rururb'].apply(categorizar_urbanizacion)
+df_pobreza['tiene_acceso']   = 1 - df_pobreza['ic_asalud']
+df_pobreza['carencia_salud'] = df_pobreza['ic_asalud']
+
+# ================================================================
+# 5. AGREGACIÓN POR ESTADO (para el mapa)
+# ================================================================
+map_data = df_pobreza.groupby('ent_geo').agg(
+    pct_acceso         = ('tiene_acceso',   'mean'),
+    pct_carencia_salud = ('carencia_salud', 'mean'),
+    ingreso_promedio   = ('ictpc',          'mean'),
+    pob_total          = ('factor',         'sum')
+).reset_index()
+
+map_data['pct_acceso']         = (map_data['pct_acceso']         * 100).round(2)
+map_data['pct_carencia_salud'] = (map_data['pct_carencia_salud'] * 100).round(2)
+map_data['ingreso_promedio']   = map_data['ingreso_promedio'].round(2)
+
+# ================================================================
+# 6. KPIs RESUMEN
+# ================================================================
+pct_carencia_nacional = df_pobreza['carencia_salud'].mean() * 100
+pct_acceso_nacional   = df_pobreza['tiene_acceso'].mean()   * 100
+ingreso_nacional      = df_pobreza['ictpc'].mean()
+estado_mayor_carencia = map_data.loc[map_data['pct_carencia_salud'].idxmax(), 'ent_geo']
+pct_max_carencia      = map_data['pct_carencia_salud'].max()
+
+# ================================================================
+# 7. MAPA COROPLÉTICO
+# ================================================================
+fig_mapa = px.choropleth(
+    map_data,
+    geojson        = mexico_geojson,
+    locations      = 'ent_geo',
+    featureidkey   = 'properties.name',
+    color          = 'pct_carencia_salud',
+    hover_name     = 'ent_geo',
+    hover_data     = {
+        'pct_carencia_salud': ':.1f',
+        'pct_acceso':         ':.1f',
+        'ingreso_promedio':   ':.0f'
+    },
+    color_continuous_scale = 'RdYlGn_r',
+    range_color            = [0, 70],
+    labels = {
+        'pct_carencia_salud': '% Carencia salud',
+        'pct_acceso':         '% Con acceso',
+        'ingreso_promedio':   'Ingreso promedio ($/mes)'
+    },
+    title = 'Carencia por acceso a salud por estado (2022)'
+)
+
+fig_mapa.update_geos(fitbounds='locations', visible=False)
+fig_mapa.update_layout(
+    margin             = dict(l=0, r=0, t=40, b=0),
+    coloraxis_colorbar = dict(title='% Carencia<br>salud', ticksuffix='%'),
+    height             = 550,
+    autosize           = True
+)
+
+# ================================================================
+# 8. SCATTER: ¿Lujo o Derecho?
+# ================================================================
+scatter_data = df_pobreza.groupby('ent_name').agg(
+    pct_urbanizacion   = ('rururb',         lambda x: (x == 0).mean() * 100),
+    pct_carencia_salud = ('carencia_salud', 'mean'),
+    ingreso_promedio   = ('ictpc',          'mean')
+).reset_index()
+
+scatter_data['pct_carencia_salud'] = (scatter_data['pct_carencia_salud'] * 100).round(2)
+scatter_data['pct_urbanizacion']   =  scatter_data['pct_urbanizacion'].round(2)
+
+def estratificar(pct):
+    if pct > 80:   return 'Alta Urbanización'
+    elif pct > 60: return 'Media Urbanización'
+    else:          return 'Baja Urbanización'
+
+scatter_data['estrato_urbano'] = scatter_data['pct_urbanizacion'].apply(estratificar)
+
+fig_scatter = px.scatter(
+    scatter_data,
+    x          = 'pct_urbanizacion',
+    y          = 'pct_carencia_salud',
+    size       = 'ingreso_promedio',
+    color      = 'estrato_urbano',
+    hover_name = 'ent_name',
+    labels     = {
+        'pct_urbanizacion':   'Grado de urbanización (%)',
+        'pct_carencia_salud': '% Carencia acceso salud',
+        'ingreso_promedio':   'Ingreso per cápita ($/mes)',
+        'estrato_urbano':     'Segmento'
+    },
+    title = 'ODS 3: ¿Es la salud un derecho o un lujo según el entorno?',
+    color_discrete_map = {
+        'Alta Urbanización':  '#2ecc71',
+        'Media Urbanización': '#f1c40f',
+        'Baja Urbanización':  '#e74c3c'
+    },
+    template = 'plotly_white'
+)
+
+promedio_carencia = scatter_data['pct_carencia_salud'].mean()
+fig_scatter.add_hline(
+    y                   = promedio_carencia,
+    line_dash           = 'dot',
+    annotation_text     = f'Promedio nacional: {promedio_carencia:.1f}%',
+    annotation_position = 'top right'
+)
+
+fig_scatter.update_layout(
+    height   = 450,
+    autosize = True,
+    margin   = dict(l=40, r=20, t=60, b=40),
+    legend   = dict(
+        title       = 'Segmento',
+        orientation = 'v',
+        x           = 0.01,
+        y           = 0.99,
+        xanchor     = 'left',
+        yanchor     = 'top',
+        bgcolor     = 'rgba(255,255,255,0.8)',
+        bordercolor = '#cccccc',
+        borderwidth = 1
+    )
+)
+
+# ================================================================
+# 9. BARRAS: Brecha por estrato
+# ================================================================
+resumen = scatter_data.groupby('estrato_urbano')[['pct_carencia_salud']].mean().reset_index()
+
+fig_bar = px.bar(
+    resumen,
+    x     = 'estrato_urbano',
+    y     = 'pct_carencia_salud',
+    color = 'estrato_urbano',
+    text  = 'pct_carencia_salud',
+    color_discrete_map = {
+        'Alta Urbanización':  '#2ecc71',
+        'Media Urbanización': '#f1c40f',
+        'Baja Urbanización':  '#e74c3c'
+    },
+    labels  = {
+        'pct_carencia_salud': '% Carencia en salud',
+        'estrato_urbano':     'Estrato'
+    },
+    title    = 'Brecha de salud por estrato de urbanización',
+    template = 'plotly_white'
+)
+
+fig_bar.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+fig_bar.update_layout(
+    showlegend  = False,
+    yaxis_range = [0, resumen['pct_carencia_salud'].max() * 1.25],
+    height      = 450,
+    autosize    = True,
+    margin      = dict(l=40, r=20, t=60, b=40)
+)
+```
+
+# Inicio
+
+## Row {height=30%}
+
+```{python}
+#| content: valuebox
+#| title: "Carencia nacional en salud"
+dict(
+    icon  = "heart-pulse",
+    color = "danger",
+    value = f"{pct_carencia_nacional:.1f}%"
+)
+```
+
+```{python}
+#| content: valuebox
+#| title: "Con acceso a salud"
+dict(
+    icon  = "hospital",
+    color = "success",
+    value = f"{pct_acceso_nacional:.1f}%"
+)
+```
+
+```{python}
+#| content: valuebox
+#| title: "Estado con mayor carencia"
+dict(
+    icon     = "exclamation-triangle",
+    color    = "warning",
+    value    = estado_mayor_carencia,
+    subtitle = f"{pct_max_carencia:.1f}% de carencia"
+)
+```
+
+```{python}
+#| content: valuebox
+#| title: "Ingreso per cápita promedio"
+dict(
+    icon     = "cash-coin",
+    color    = "info",
+    value    = f"${ingreso_nacional:,.0f}",
+    subtitle = "pesos / mes"
+)
+```
+
+## Row {height=70%}
+
+```{python}
+#| title: "Mapa — % Carencia en acceso a salud por estado"
+fig_mapa.show()
+```
+
+# Análisis
+
+## Row {height=100%}
+
+### Column {width=58%}
+
+```{python}
+#| title: "¿Es la salud un derecho o un lujo según el entorno?"
+fig_scatter.show()
+```
+
+### Column {width=42%}
+
+```{python}
+#| title: "Brecha de salud por estrato de urbanización"
+fig_bar.show()
+```

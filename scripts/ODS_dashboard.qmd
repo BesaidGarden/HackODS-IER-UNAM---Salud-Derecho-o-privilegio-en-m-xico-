@@ -154,7 +154,13 @@ fig_mapa.update_geos(fitbounds='locations', visible=False)
 fig_mapa.update_layout(
     margin  = dict(l=0, r=0, t=60, b=0),
     height  = 550,
-    autosize = True
+    autosize = True,
+    legend=dict(
+        x=0.8,           # Mueve la leyenda hacia la izquierda (ajusta este número entre 0 y 1)
+        y=0.5,           # Centra la leyenda verticalmente
+        xanchor="left",  # El ancla horizontal de la leyenda
+        yanchor="middle" # El ancla vertical de la leyenda
+    )
 )
 
 # ================================================================
@@ -188,7 +194,13 @@ fig_scatter.add_hline(
 fig_scatter.update_layout(
     height   = 450,
     autosize = True,
-    margin   = dict(l=40, r=20, t=60, b=40)
+    margin   = dict(l=40, r=20, t=60, b=40),
+    legend=dict(
+        x=0.7,           # Mueve la leyenda hacia la izquierda (ajusta este número entre 0 y 1)
+        y=0.8,           # Centra la leyenda verticalmente
+        xanchor="left",  # El ancla horizontal de la leyenda
+        yanchor="middle" # El ancla vertical de la leyenda
+    )
 )
 
 # ================================================================
@@ -316,10 +328,17 @@ fig_impuesto.add_shape(
     line_width = 0
 )
 fig_impuesto.update_layout(
-    legend = dict(orientation='h', y=-0.25, x=0.5, xanchor='center'),
+    
     margin = dict(t=50, b=100),
     height = 450,
-    autosize = True
+    autosize = True,
+    legend=dict(
+        x=0.7,           # Mueve la leyenda hacia la izquierda (ajusta este número entre 0 y 1)
+        y=0.8,           # Centra la leyenda verticalmente
+        xanchor="right",  # El ancla horizontal de la leyenda
+        yanchor="middle", 
+        title= "Estrato"
+    )
 )
 ```
 

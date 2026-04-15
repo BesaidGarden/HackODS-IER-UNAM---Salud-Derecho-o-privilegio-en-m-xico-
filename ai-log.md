@@ -1,7 +1,5 @@
 # AI Log - XGBros
 
-## Herramientas 
-
 ## Herramientas
 - Claude (claude.ai)
 - Google Gemini
